@@ -7,7 +7,7 @@ module.exports = (sails) => {
            sails.log.debug("pre red"+sails)
          },
       initialize: (cb) => {
-           let RED = require("node-red");
+/*            let RED = require("node-red");
             // Create the settings object - see default settings.js file for other options
             let settings = {
                     httpAdminRoot:"/red",
@@ -49,7 +49,7 @@ module.exports = (sails) => {
 
             // Start the runtime
             RED.start();
-    return cb();
+ */    return cb();
         
         }
           //sails.log.debug(sails.loggedInUser)
