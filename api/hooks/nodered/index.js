@@ -7,15 +7,20 @@ module.exports = (sails) => {
            sails.log.debug("pre red"+sails)
          },
       initialize: (cb) => {
-            let RED = require("node-red");
+           let RED = require("node-red");
             // Create the settings object - see default settings.js file for other options
             let settings = {
                     httpAdminRoot:"/red",
                     httpNodeRoot: "/api",
+                    //working hook
                     userDir:"/home/tim/.nodered/", // change it to point to your user home dir
-                    functionGlobalContext: { },    // enables global context
+ 
+                    //new lines from RSA
+                    // flowFile: "/home/tim/.nodered/"+this.req.session.userId+"/"+flows.json,
+                    // userDir:"/home/tim/.nodered/"+this.req.session.userId,
+                functionGlobalContext: { },    // enables global context
                     httpNodeMiddleware: function (req, res, next) {
-                      
+                          
                         const env = process.env.NODE_ENV || 'development';
                         sails.log.debug('<<------------------------------');
                         sails.log.debug("Requested data :: ");
@@ -44,7 +49,7 @@ module.exports = (sails) => {
 
             // Start the runtime
             RED.start();
-        return cb();
+    return cb();
         
         }
           //sails.log.debug(sails.loggedInUser)
