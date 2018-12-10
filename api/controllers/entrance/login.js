@@ -105,6 +105,49 @@ and exposed as \`req.me\`.)`
     }//ﬁ
 
     // Modify the active session instance.
+
+    sails.log.debug('*****'+userRecord.id);
+        let RED = require("node-red");
+        // Create the settings object - see default settings.js file for other options
+        let settings = {
+                httpAdminRoot:"/red/"+userRecord.id,
+                httpNodeRoot: "/api/"+userRecord.id,
+                userDir:"/home/tim/.nodered/"+userRecord.id, // change it to point to your user home dir
+                functionGlobalContext: { },    // enables global context
+                httpNodeMiddleware: function (req, res, next) {
+                    const env = process.env.NODE_ENV || 'development';
+                    sails.log.debug('<<------------------------------');
+                    sails.log.debug("Requested data :: ");
+                    sails.log.debug('  ', this.req.method, this.req.url);
+                    if (env.toLowerCase() !== 'production') {
+                        sails.log.debug('   Headers:');
+                        sails.log.debug(this.req.headers);
+                        sails.log.debug('   Params:');
+                        sails.log.debug(this.req.params);
+                        sails.log.debug('   Body:');
+                        sails.log.debug(this.req.body);
+                    }
+                    sails.log.debug('------------------------------>>');
+                    return next();
+                },
+        };
+        RED.stop();
+        // Initialise the runtime with a server and settings
+        RED.init(sails.hooks.http.server,settings);
+    
+        // Serve the editor UI from /red
+        sails.hooks.http.app.use(settings.httpAdminRoot, RED.httpAdmin);
+    
+        // Serve the http nodes UI from /api
+        sails.hooks.http.app.use(settings.httpNodeRoot, RED.httpNode);
+    
+        // Start the runtime
+        RED.start();
+    
+        //this line causes bug
+       this.req.session.RED = RED;
+    
+
     // (This will be persisted when the response is sent.)
     this.req.session.userId = userRecord.id;
 
